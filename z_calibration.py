@@ -326,25 +326,21 @@ class CalibrationState:
         # probe the nozzle
         nozzle_zero = self._probe_on_site(self.z_endstop,
                                           self.helper.nozzle_site)
-        # probe the probe-switch
-        self.helper.switch_gcode.run_gcode_from_command()
-        # probe the body of the switch
-        switch_zero = self._probe_on_site(self.z_endstop,
-                                          self.helper.switch_site,
-                                          True)
         # probe position on bed
         probe_site = self._add_probe_offset(self.helper.bed_site)
         probe_zero = self._probe_on_site(self.probe.mcu_probe,
                                          probe_site,
                                          True)
         # calculate the offset
-        offset = probe_zero - (switch_zero - nozzle_zero
-                               + self.helper.switch_offset)
+        # TEST!!!!!!
+        offset = probe_zero - nozzle_zero
+                               
         # print result
+        # TEST!!!!
         self.gcmd.respond_info("Z-CALIBRATION: ENDSTOP=%.3f NOZZLE=%.3f"
                                " SWITCH=%.3f PROBE=%.3f --> OFFSET=%.6f"
                                % (self.helper.z_homing, nozzle_zero,
-                                  switch_zero, probe_zero, offset))
+                                  probe_zero, offset))
         # check max deviation
         if abs(offset) > self.helper.max_deviation:
             self.helper.end_gcode.run_gcode_from_command()
